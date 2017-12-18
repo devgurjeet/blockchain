@@ -34,12 +34,32 @@ class BlockChain {
 		newBlock.hash = newBlock.calculateHash();
 		this.chain.push(newBlock);
 	}
+
+	isChainValid() {
+		for( let i = 1; i < this.chain.length; i++ ) {
+			
+			const currentBlock  = this.chain[i];
+			const previousBlock = this.chain[i - 1];
+
+			if( currentBlock.hash !== currentBlock.calculateHash() ) {
+				return false;
+			}
+
+			if(currentBlock.previousHash !== previousBlock.hash ) {
+				return false;
+			}
+
+			return true;
+		}
+	}
 }
 
 let gCoin = new BlockChain()
 
 gCoin.addBlock( new Block(1, '02/01/2018', {amount: 10}));
 gCoin.addBlock( new Block(2, '03/01/2018', {amount: 15}));
+
+console.log("Chain is: ", gCoin.isChainValid());
 
 console.log(JSON.stringify(gCoin, null, 4));
 
